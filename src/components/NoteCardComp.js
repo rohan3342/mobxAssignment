@@ -1,27 +1,55 @@
 import React from 'react';
-import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, Text, StyleSheet, Platform } from 'react-native';
 
-const NoteCardComp = ({ id, title, body, navigateToNotesComp }) => {
+const NoteCardComp = ({ id, title, data, navigateToNotesComp, deleteNote }) => {
   return (
-    <TouchableOpacity
-      key={id.toString()}
-      style={styles.container}
-      onPress={() => navigateToNotesComp('updateScreen', id)}
-    >
-      <View style={styles.titleView}>
-        <Text> {title} </Text>
-      </View>
-      <View style={styles.titleView}>
-        <Text> {body} </Text>
-      </View>
-    </TouchableOpacity>
+    <View style={styles.containerWrapper}>
+      <TouchableOpacity
+        key={id.toString()}
+        style={styles.container}
+        onPress={() => navigateToNotesComp('updateScreen', id)}
+        onLongPress={() => deleteNote(id)}
+      >
+        <View style={styles.titleView}>
+          <Text style={styles.titleTxt}>{title}</Text>
+        </View>
+        <View style={styles.titleView}>
+          <Text style={styles.dataTxt}>{data}</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  containerWrapper: {
+    backgroundColor: '#fafafa',
+    padding: 10,
     marginVertical: 5,
     marginHorizontal: 10,
+    borderRadius: 20,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#60DAC4',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.4,
+        shadowRadius: 5,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
+  },
+  titleView: {
+    marginVertical: 2,
+  },
+  titleTxt: {
+    fontSize: 20,
+  },
+  dataTxt: {
+    opacity: 0.8,
+    fontSize: 15,
+    fontWeight: '300',
   },
 });
 

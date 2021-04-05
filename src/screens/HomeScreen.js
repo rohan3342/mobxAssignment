@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
+  Alert,
+  Image,
+  FlatList,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
 } from 'react-native';
 import NoteCardComp from '../components/NoteCardComp';
 import { inject, observer } from 'mobx-react';
+import { add } from '../assets/index';
 
 @inject('noteStore')
 @observer
@@ -22,13 +25,26 @@ class HomeScreen extends Component {
       key={item.id.toString()}
       id={item.id}
       title={item.title}
-      body={item.body}
+      data={item.data}
       navigateToNotesComp={this.navigateToNotesComp}
+      deleteNote={this.deleteNote}
     />;
   };
 
   navigateToNotesComp = (titleType, id) => {
     this.navigation.navigate('NoteScreen', { titleType, id })
+  }
+
+  deleteNote = (id) => {
+    Alert.alert('Delete Item', 'Are you sure you want to delete this note ?', [
+      {
+        text: 'Yes',
+        style: 'destructive',
+        onPress: () => this.props.noteStore.removeNotes(id)
+      },
+      { text: 'No', style: 'cancel' },
+    ]);
+
   }
 
   emptyNotes = () => {
@@ -45,7 +61,7 @@ class HomeScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.headerView}>
-          <Text style={styles.headerTxt}>HomeScreen</Text>
+          <Text style={styles.headerTxt}>Simple Note Taker</Text>
         </View>
         <View style={styles.notesWrapperView}>
           {this.props.noteStore.getAllNotes.length === 0 ?
@@ -61,7 +77,8 @@ class HomeScreen extends Component {
           <TouchableOpacity
             style={styles.addBtn}
             onPress={() => this.navigation.navigate('NoteScreen', { titleType: 'addScreen' })}>
-            <Text style={styles.addBtnTxt}>+ Add New Note</Text>
+            <Image source={add} style={styles.addBtnIcon} />
+            <Text style={styles.addBtnTxt}>ADD NEW NOTE</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -96,16 +113,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   addBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginHorizontal: 20,
-    marginVertical: 5,
-    padding: 10,
+    marginVertical: 10,
+    padding: 15,
     paddingHorizontal: 20,
     backgroundColor: '#60DAC4',
     borderRadius: 20,
   },
+  addBtnIcon: {
+    height: 20,
+    width: 20,
+    marginRight: 5,
+  },
   addBtnTxt: {
     fontSize: 16,
-    color: '#333',
+    fontWeight: '500',
+    color: 'white',
   },
   emptyNoteListView: {
     flex: 1,

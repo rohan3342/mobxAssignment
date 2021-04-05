@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
+  Image,
+  TextInput,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
 } from 'react-native';
 import { inject, observer } from 'mobx-react';
+import { saveActive, saveInActive } from '../assets/index';
 
 @inject('noteStore')
 @observer
@@ -18,8 +20,10 @@ class NoteScreen extends Component {
     this.id = this.props.route.params.id;
     this.state = {
       title: '',
-      body: '',
+      data: '',
       titleType: '',
+      txtInputTitle: false,
+      txtInputData: false,
     };
   }
 
@@ -27,17 +31,17 @@ class NoteScreen extends Component {
     this.setState({ title });
   }
 
-  changeBody = body => {
-    this.setState({ body });
+  changedata = data => {
+    this.setState({ data });
   }
 
   setNotes = async () => {
-    const { title, body } = this.state;
+    const { title, data } = this.state;
     if (this.titleType === 'addScreen') {
-      this.props.noteStore.addNotes(title, body);
+      this.props.noteStore.addNotes(title, data);
     }
     if (this.titleType === 'updateScreen') {
-      this.props.noteStore.updateNotes(this.id, title, body);
+      this.props.noteStore.updateNotes(this.id, title, data);
     }
   }
 
@@ -46,9 +50,9 @@ class NoteScreen extends Component {
       this.setState({ titleType: 'Add a New Note' });
     }
     if (this.titleType === 'updateScreen') {
-      const { title, body } = this.props.noteStore.getNotes(this.id);
+      const { title, data } = this.props.noteStore.getNotes(this.id);
       this.setState({ titleType: 'Edit Note' });
-      this.setState({ title, body });
+      this.setState({ title, data });
     }
   }
 
@@ -69,28 +73,36 @@ class NoteScreen extends Component {
         </View>
         <View style={styles.inputWrapper}>
           <TextInput
-            style={styles.txtInput}
             placeholder="Title"
             value={this.state.title}
             onChangeText={text => this.changeTitle(text)}
+            onFocus={() => this.setState({ txtInputTitle: true })}
+            onBlur={() => this.setState({ txtInputTitle: false })}
+            style={[styles.txtInput,
+            this.state.txtInputTitle ? styles.activeInput : styles.inActiveInput]}
           />
           <TextInput
             multiline
             maxLength={500}
-            style={[styles.txtInput, styles.noteInput]}
             placeholder="Enter Note"
-            value={this.state.body}
-            onChangeText={text => this.changeBody(text)}
+            value={this.state.data}
+            onChangeText={text => this.changedata(text)}
+            onFocus={() => this.setState({ txtInputData: true })}
+            onBlur={() => this.setState({ txtInputData: false })}
+            style={[styles.txtInput, styles.noteInput,
+            this.state.txtInputData ? styles.activeInput : styles.inActiveInput]}
           />
         </View>
         <View style={styles.addBtnWrapperView}>
           <TouchableOpacity
-            style={styles.addBtn}
+            style={[styles.addBtn]}
             onPress={() => {
               this.setNotes();
               this.navigation.navigate('HomeScreen');
             }}>
-            <Text style={styles.addBtnTxt}>Save</Text>
+            <Image
+              style={styles.saveIcon}
+              source={this.state.title.length > 0 ? saveActive : saveInActive} />
           </TouchableOpacity>
         </View>
       </View>
@@ -118,7 +130,7 @@ const styles = StyleSheet.create({
   },
   crossBtn: {
     position: 'absolute',
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: 'rgba(0,0,0,0.3)',
     borderRadius: 15,
     height: 30,
     width: 30,
@@ -137,9 +149,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   txtInput: {
-    fontSize: 16,
-    borderColor: '#60DAC4',
-    borderWidth: 1,
+    fontSize: 18,
     width: '90%',
     height: 50,
     marginVertical: 10,
@@ -150,22 +160,27 @@ const styles = StyleSheet.create({
   noteInput: {
     height: 200,
   },
+  activeInput: {
+    borderWidth: 2,
+    borderColor: '#60DAC4',
+  },
+  inActiveInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
   addBtnWrapperView: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   addBtn: {
-    marginHorizontal: 20,
+    marginHorizontal: 5,
     marginVertical: 5,
-    padding: 10,
-    paddingHorizontal: 20,
-    backgroundColor: '#60DAC4',
     borderRadius: 20,
   },
-  addBtnTxt: {
-    fontSize: 16,
-    color: '#333',
+  saveIcon: {
+    height: 75,
+    width: 75
   },
 });
 

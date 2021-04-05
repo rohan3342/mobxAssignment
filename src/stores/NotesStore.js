@@ -7,46 +7,45 @@ class NotesStore {
       addNotes: action,
       getNotes: action,
       updateNotes: action,
+      removeNotes: action,
       getAllNotes: computed,
     });
   }
   notes = [
     {
       id: 1,
-      title: 'T1',
-      body: 'B1',
+      title: 'Task 1',
+      data: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     },
     {
       id: 2,
-      title: 'T2',
-      body: 'B2',
-    },
-    {
-      id: 3,
-      title: 'T3',
-      body: 'B3',
+      title: 'Task 2',
+      data: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     },
   ];
-
-  addNotes(title, body) {
-    const id = this.notes.length + 1;
-    this.notes.push({ id, title, body });
-  }
 
   get getAllNotes() {
     return this.notes;
   }
 
-  updateNotes(id, title, body) {
-    //console.log(id, title);
-    this.notes.id = { title, body };
-    console.log(this.notes.id);
+  addNotes(title, data) {
+    const id = this.notes.length + 1;
+    return this.notes = [...this.notes, { id, title, data }];
   }
 
   getNotes(id) {
-    const data = this.notes.find(ele => ele.id === id);
-    return data;
+    return this.notes.find(ele => ele.id === id);
   }
+
+  updateNotes(id, title, data) {
+    const newNotes = this.notes.map((ele) => ele.id === id ? { id, title, data } : ele);
+    return this.notes = newNotes;
+  }
+
+  removeNotes(id) {
+    return this.notes = this.notes.filter(item => item.id !== id);
+  }
+
 }
 
 export default new NotesStore();
