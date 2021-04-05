@@ -15,12 +15,12 @@ class NotesStore {
     {
       id: 1,
       title: 'Task 1',
-      data: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      data: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
     },
     {
       id: 2,
       title: 'Task 2',
-      data: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      data: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
     },
   ];
 

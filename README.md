@@ -20,4 +20,4 @@
 
 > ### Output:
 >
-> <img width="300px" src="./src/"></img>
+> <img width="300px" src="./src/screenshots/output.gif"></img>

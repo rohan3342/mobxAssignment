@@ -44,7 +44,6 @@ class HomeScreen extends Component {
       },
       { text: 'No', style: 'cancel' },
     ]);
-
   }
 
   emptyNotes = () => {
